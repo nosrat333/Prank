@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRITICAL SECURITY ALERT</title>
+    <style>
+        body {
+            background-color: #ff0000;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            animation: bgFlash 0.15s infinite;
+        }
+        .box {
+            border: 6px dashed #ffffff;
+            padding: 40px;
+            background-color: #000000;
+            box-shadow: 0 0 60px #ffffff;
+            max-width: 90%;
+            border-radius: 15px;
+        }
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: #ff0000;
+            text-shadow: 2px 2px #fff;
+            animation: glitch 0.1s infinite;
+        }
+        p {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        @keyframes bgFlash {
+            0% { background-color: #ff0000; color: #000; }
+            50% { background-color: #000; color: #ff0000; }
+            100% { background-color: #ff0000; color: #000; }
+        }
+        @keyframes glitch {
+            0% { transform: translate(3px, -3px); }
+            50% { transform: translate(-3px, 3px); }
+            100% { transform: translate(3px, 3px); }
+        }
+    </style>
+</head>
+<body onclick="triggerAlarm()">
+
+    <div class="box">
+        <h1>⚠️ خطای مهلک سیستم! ⚠️</h1>
+        <p>دستگاه شما در معرض نفوذ جدی قرار گرفت!</p>
+        <p style="font-size: 1rem; color: #ffeb3b; margin-top: 15px;">(جهت رفع خطای امنیتی صفحه را لمس کنید)</p>
+    </div>
+
+    <script>
+        // شروع ویبره خودکار به محض ورود به صفحه
+        window.addEventListener('DOMContentLoaded', () => {
+            if (navigator.vibrate) {
+                setInterval(() => {
+                    navigator.vibrate([1000, 200, 1000, 200, 1000]);
+                }, 3000);
+            }
+        });
+
+        // شروع آژیر صوتی و تشدید ویبره با اولین لمس صفحه توسط کاربر
+        function triggerAlarm() {
+            if (navigator.vibrate) {
+                navigator.vibrate([2000, 100, 2000, 100, 2000]);
+            }
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                setInterval(() => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.2);
+                }, 200);
+            } catch (e) {}
+        }
+    </script>
+</body>
+</html>
